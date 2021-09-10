@@ -1,0 +1,45 @@
+name: Install SLATE
+
+on:
+  # only manually started for testing the GitHub Actions machines
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Instal dependencies
+        run: |
+          # general apt
+          sudo apt-get install --yes \
+                make gfortran g++ libopenmpi-dev \
+                cmake vim git wget ca-certificates \
+                apt-transport-https gnupg
+
+          # add oneAPI repository to apt
+          wget https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB
+          sudo apt-key add GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB
+          rm GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB
+          sudo echo "deb https://apt.repos.intel.com/oneapi all main" | sudo tee /etc/apt/sources.list.d/oneAPI.list
+          sudo apt-get update
+
+          # install MKL
+          sudo apt-get install --yes --no-install-recommends intel-oneapi-mkl-devel
+
+          # set environment variables
+          source /opt/intel/oneapi/setvars.sh
+          printenv >> $GITHUB_ENV
+
+      - name: Download Slate
+        run: git clone --recursive https://bitbucket.org/icl/slate
+
+      - name: Install with CMake
+        run: |
+          cd slate
+          mkdir build && cd build
+          cmake -Dblas=mkl -Dblas_threaded=1 ..
+          cmake --build .
+          cmake --install .

@@ -14,6 +14,10 @@ RUN apt-get -q update && \
         libopenmpi-dev \
         # cmake and tools
         cmake vim git wget ca-certificates \
+        # CBLAS and LapackE
+        liblapacke-dev libatlas-base-dev \
+#        # graphviz to visualise CMake dependency  \
+#        graphviz
     && rm -rf /var/lib/apt/lists/*
 
 # MKL installation
@@ -34,7 +38,7 @@ ENV LIBRARY_PATH='/opt/intel/oneapi/vpl/2021.4.0/lib:/opt/intel/oneapi/tbb/2021.
 RUN git clone --recursive https://bitbucket.org/icl/slate && \
     cd slate && mkdir build && cd build && \
     cmake -Dblas=mkl -Dblas_threaded=1 .. && \
-    cmake --build . && \
+    cmake --build . --target slate && \
     cmake --install . && \
     cd ../../ && \
     rm -rf slate

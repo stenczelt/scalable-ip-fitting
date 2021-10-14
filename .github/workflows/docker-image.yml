@@ -19,7 +19,12 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build SLATE with MKL/GNU
+      - name: Build SLATE with GNU & generic blas
         run: |
-          docker build --tag stenczelt/slate:mkl-gnu devtools/Docker_GNU_MKL
-          docker push stenczelt/slate:mkl-gnu
+          docker build --tag stenczelt/slate:gnu devtools/Docker_GNU
+          docker push stenczelt/slate:gnu
+
+#      - name: Build SLATE with MKL/GNU
+#        run: |
+#          docker build --tag stenczelt/slate:mkl-gnu devtools/Docker_GNU_MKL
+#          docker push stenczelt/slate:mkl-gnu

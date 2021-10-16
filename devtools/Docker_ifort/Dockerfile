@@ -49,58 +49,13 @@ RUN echo "deb $repo all main" > /etc/apt/sources.list.d/oneAPI.list
 ARG disable_cert_check=""
 RUN if [ "$disable_cert_check" ] ; then echo "Acquire::https::Verify-Peer \"false\";\nAcquire::https::Verify-Host \"false\";" > /etc/apt/apt.conf.d/99-disable-cert-check ; fi
 
-# install Intel(R) oneAPI Base Toolkit
+# install Intel(R) oneAPI Packages
 RUN apt-get update -y && \
 apt-get install -y --no-install-recommends -o=Dpkg::Use-Pty=0 \
-    intel-basekit-getting-started \
-    intel-oneapi-advisor \
-    intel-oneapi-ccl-devel \
-    intel-oneapi-common-licensing \
-    intel-oneapi-common-vars \
     intel-oneapi-compiler-dpcpp-cpp \
-    intel-oneapi-dal-devel \
-    intel-oneapi-dev-utilities \
-    intel-oneapi-dnnl-devel \
-    intel-oneapi-dpcpp-debugger \
-    intel-oneapi-ipp-devel \
-    intel-oneapi-ippcp-devel \
-    intel-oneapi-libdpstd-devel \
     intel-oneapi-mkl-devel \
-    intel-oneapi-onevpl-devel \
-    intel-oneapi-python \
-    intel-oneapi-tbb-devel \
-    intel-oneapi-vtune \
-    --
-
-# install Intel GPU drivers
-RUN echo 'deb [trusted=yes arch=amd64] https://repositories.intel.com/graphics/ubuntu bionic main' \
-> /etc/apt/sources.list.d/intel-graphics.list
-
-ARG url=https://repositories.intel.com/graphics/intel-graphics.key
-RUN wget $url && file=$(basename "$url") && \
-    file=$(basename "$url") && \
-    apt-key add "$file" && \
-    rm "$file"
-
-RUN apt-get update -y && \
-apt-get install -y --no-install-recommends -o=Dpkg::Use-Pty=0 \
-    intel-opencl \
-    intel-level-zero-gpu \
-    level-zero \
-    level-zero-devel
-
-# install Intel(R) oneAPI HPC Toolkit
-RUN apt-get update -y && \
-apt-get install -y --no-install-recommends -o=Dpkg::Use-Pty=0 \
-    intel-hpckit-getting-started \
-    intel-oneapi-clck \
-    intel-oneapi-common-licensing \
-    intel-oneapi-common-vars \
     intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic \
     intel-oneapi-compiler-fortran \
-    intel-oneapi-dev-utilities \
-    intel-oneapi-inspector \
-    intel-oneapi-itac \
     intel-oneapi-mpi-devel \
     --
 

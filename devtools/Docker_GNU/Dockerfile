@@ -23,7 +23,7 @@ RUN apt-get -q update && \
 ## install SLATE
 RUN git clone --recursive https://bitbucket.org/icl/slate && \
     cd slate && mkdir build && cd build && \
-    cmake  .. && \
+    cmake -Dbuild_tests=no .. && \
     cmake --build . && \
     cmake --install . && \
     cd ../../ && \

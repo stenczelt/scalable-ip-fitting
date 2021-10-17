@@ -19,13 +19,13 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-#      - name: Build SLATE with GNU & generic blas
-#        env:
-#          tag: slate:gnu
-#          dir: devtools/Docker_GNU
-#        run: |
-#          docker build --tag stenczelt/$tag $dir
-#          docker push stenczelt/$tag
+      - name: Build SLATE with GNU & generic blas
+        env:
+          tag: slate:gnu
+          dir: devtools/Docker_GNU
+        run: |
+          docker build --tag stenczelt/$tag $dir
+          docker push stenczelt/$tag
 
       - name: Build SLATE with GNU & MKL
         env:

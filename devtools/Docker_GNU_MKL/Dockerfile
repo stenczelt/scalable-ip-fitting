@@ -41,13 +41,13 @@ RUN env > default_env_vars; \
     rm -rf /var/lib/apt/lists/*
 
 # install SLATE
-RUN git clone --recursive https://bitbucket.org/icl/slate && \
-    cd slate && mkdir build && cd build && \
-    cmake -Dblas=mkl -Dbuild_tests=no .. && \
+RUN git clone --recursive https://bitbucket.org/icl/slate /tmp/slate && \
+    cd /tmp/slate && mkdir build && cd build && \
+    . /opt/intel/oneapi/setvars.sh && cmake -Dblas=mkl -Dbuild_tests=no .. && \
     cmake --build . && \
     cmake --install . && \
-    cd ../../ && \
-    rm -rf slate
+    cd / && \
+    rm -rf /tmp/slate
 
 # DEV use: oh-my-zsh instead of bash
 # Uses "robbyrussell" theme (original Oh My Zsh theme), with no plugins

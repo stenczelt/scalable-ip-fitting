@@ -16,8 +16,8 @@ RUN apt-get -q update && \
         cmake vim git wget ca-certificates \
         # CBLAS and LapackE
         liblapacke-dev libatlas-base-dev \
-#        # graphviz to visualise CMake dependency  \
-#        graphviz
+        # ScaLapack \
+        libscalapack-openmpi-dev \
     && rm -rf /var/lib/apt/lists/*
 
 ## install SLATE

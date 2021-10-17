@@ -72,4 +72,22 @@ RUN env > default_env_vars; \
     rm *env_vars; \
     rm -rf /var/lib/apt/lists/*
 
-ENTRYPOINT ["bash", "-c", "source /root/.oneapi_env_vars && \"$@\"", "bash"]
+# install SLATE
+RUN git clone --recursive https://bitbucket.org/icl/slate /tmp/slate && \
+    cd /tmp/slate && mkdir build && cd build && \
+    . /opt/intel/oneapi/setvars.sh && cmake -Dblas=mkl -Dbuild_tests=no .. && \
+    cmake --build . && \
+    cmake --install . && \
+    cd / && \
+    rm -rf /tmp/slate
+
+# DEV use: oh-my-zsh instead of bash
+# Uses "robbyrussell" theme (original Oh My Zsh theme), with no plugins
+RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/v1.1.1/zsh-in-docker.sh)" -- \
+    -t robbyrussell \
+ENTRYPOINT ["/usr/bin/zsh", "-c", "source /root/.oneapi_env_vars && \"$@\"", "/usr/bin/zsh"]
+WORKDIR /work
+
+# python executable
+RUN echo "alias python=python3" >> /root/.zshrc
+
